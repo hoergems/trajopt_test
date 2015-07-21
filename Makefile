@@ -3,18 +3,21 @@
 CC=g++
 # Hey!, I am comment number 2. I want to say that CFLAGS will be the
 # options I'll pass to the compiler.
-CFLAGS=-c -I/home/marcus/trajopt/src -I/home/marcus/trajopt/src/trajopt -I/usr/include/eigen3 -I/usr/local/include/openrave-0.9 -I/usr/include/boost -L/home/marcus/trajopt/build_trajopt/lib -L/usr/lib/x86_64-linux-gnu
+CFLAGS=-g -c 
 
-LDFLAGS= -lutils -ltrajopt
-BOOSTFLAGS= -lboost_system 
+INCLUDEFLAGS=-I/home/hoe01h/Downloads/trajopt/src -I/usr/include/eigen3 -I/usr/local/include/openrave-0.9 -I/usr/include/boost -L/usr/lib/ -L/usr/local/lib/
+
+LDFLAGS= -lutils -ltrajopt -lopenrave0.9 -lopenrave0.9-core -losgviewer
+BOOSTFLAGS= -lboost_system -lboost_program_options
 
 all: traj clean
 
-traj.o: traj.cpp
-	$(CC) $(CFLAGS) traj.cpp $(LDFLAGS)
-	
 traj: traj.o
-	$(CC) traj.o -o traj $(BOOSTFLAGS)
+	$(CC) $(INCLUDEFLAGS) traj.o -o traj $(LDFLAGS) $(BOOSTFLAGS)
+
+traj.o: traj.cpp
+	$(CC) $(CFLAGS) $(INCLUDEFLAGS) traj.cpp
+	
 
 clean:
-	rm *o traj
+	rm *.o

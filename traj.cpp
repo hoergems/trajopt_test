@@ -2,6 +2,8 @@
 
 using namespace std;
 using namespace trajopt;
+using namespace util;
+using namespace OpenRAVE;
 
 namespace traj_test {
 
@@ -27,5 +29,12 @@ int main(int argc, char** argv) {
       CommandParser parser(config);
       parser.read(argc, argv);
     }
+
+    RaveInitialize(false, verbose ? Level_Debug : Level_Info);
+    EnvironmentBasePtr env = RaveCreateEnvironment();
+    env->StopSimulation();
+
+    OSGViewerPtr viewer = OSGViewer::GetOrCreate(env);
+    assert(viewer);
     return 0;
 }
