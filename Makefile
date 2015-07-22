@@ -3,7 +3,7 @@
 CC=g++
 # Hey!, I am comment number 2. I want to say that CFLAGS will be the
 # options I'll pass to the compiler.
-CFLAGS=-g -c 
+CFLAGS=-g -c -std=c++0x
 
 INCLUDEFLAGS=-I/home/hoe01h/Downloads/trajopt/src -I/usr/include/eigen3 -I/usr/local/include/openrave-0.9 -I/usr/include/boost -L/usr/lib/ -L/usr/local/lib/
 

@@ -4,6 +4,7 @@
 //#include "sco/expr_op_overloads.hpp"
 
 #include <iostream>
+#include <string>
 
 #include "sco/optimizers.hpp"
 #include "sco/solver_interface.hpp"
@@ -26,13 +27,66 @@
 #include <cmath>
 #include <boost/timer.hpp>
 
+using namespace std;
+using namespace trajopt;
+using namespace util;
+using namespace OpenRAVE;
+using std::string;
+
 namespace traj_test {
 
 class TrajTest {
     public:
-        TrajTest();
+        TrajTest(bool plotting, 
+                 bool verbose, 
+                 int n_dof,
+                 int num_step_,
+                 double control_rate,
+                 double delta_t,
+                 double max_joint_velocity,
+                 string env_path,
+                 string robot_path);
+
+        void setup(std::vector<double> &start_state,
+                   std::vector<double> &goal_state);
+  
+        void planPath();
         ~TrajTest() = default;
-        
+
+    private:
+        bool plotting_;
+
+        bool verbose_;
+
+        int n_dof_;   
+
+        int num_steps_; 
+
+        double control_rate_;
+
+        double delta_t_;
+
+        double max_joint_velocity_; 
+
+        double max_dist_;
+
+        string env_path_;
+
+        string robot_path_;
+
+        EnvironmentBasePtr env_;  
+
+        RobotBasePtr robot_; 
+
+        OptProbPtr prob_;
+
+        RobotAndDOFPtr rad_; 
+
+        Vector3d start_;
+ 
+        Vector3d goal_; 
+
+        VarArray trajvars_;        
     
 };
 
