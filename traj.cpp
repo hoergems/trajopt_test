@@ -58,10 +58,7 @@ void TrajTest::setup(std::vector<double> &start_state,
         goal_[k] = goal_state[k];
     }    
     rad_->SetDOFValues(toDblVec(start_));
-
-    prob_ = OptProbPtr(new OptProb());
-
-    //VarArray trajvars;
+    prob_ = OptProbPtr(new OptProb());    
     AddVarArray(*prob_, num_steps_, n_dof_, "theta", trajvars_);
 
     // Velocity cost
@@ -103,6 +100,7 @@ void TrajTest::planPath() {
 
     // Optimization
     BasicTrustRegionSQP opt(prob_);
+
     // straight line initialization
     MatrixXd initTraj(num_steps_, n_dof_);  
     for (int idof = 0; idof < n_dof_; ++idof) {
@@ -125,8 +123,8 @@ void TrajTest::planPath() {
 }
 
 int main(int argc, char** argv) {
-    traj_test::TrajTest tt(true,
-                           true,
+    traj_test::TrajTest tt(false,
+                           false,
                            3,
                            50,
                            30.0,
