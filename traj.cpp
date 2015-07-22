@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
     start = Vector3d(0, 0, 0);
     goal = Vector3d(-M_PI / 2.0, 0, 0);
     rad->SetDOFValues(toDblVec(start));
+
     OptProbPtr prob(new OptProb()); 
     VarArray trajvars;
     AddVarArray(*prob, n_steps, n_dof, "theta", trajvars);  
@@ -87,7 +88,7 @@ int main(int argc, char** argv) {
         prob->addLinearConstraint(dist3 - max_dist, INEQ);
         prob->addLinearConstraint(-dist3 - max_dist, INEQ);
         if (i > 0) {
-            prob->addCost(CostPtr(new CollisionCost(0.1, 20, rad, vars0, vars1)));
+            prob->addCost(CostPtr(new CollisionCost(0.05, 20, rad, vars0, vars1)));
         }
     }
 
