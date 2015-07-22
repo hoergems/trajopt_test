@@ -1,11 +1,6 @@
 #include "osgviewer/osgviewer.hpp"
-//#include "sco/expr_ops.hpp"
-//#include "sco/modeling_utils.hpp"
-//#include "sco/expr_op_overloads.hpp"
-
 #include <iostream>
 #include <string>
-
 #include "sco/optimizers.hpp"
 #include "sco/solver_interface.hpp"
 #include "sco/expr_op_overloads.hpp"
@@ -13,7 +8,6 @@
 #include "sco/sco_common.hpp"
 #include "sco/sco_fwd.hpp"
 #include "sco/num_diff.hpp"
-
 #include "trajopt/collision_checker.hpp"
 #include "trajopt/collision_terms.hpp"
 #include "trajopt/trajectory_costs.hpp"
