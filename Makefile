@@ -7,7 +7,7 @@ CFLAGS=-g -c
 
 INCLUDEFLAGS=-I/home/hoe01h/Downloads/trajopt/src -I/usr/include/eigen3 -I/usr/local/include/openrave-0.9 -I/usr/include/boost -L/usr/lib/ -L/usr/local/lib/
 
-LDFLAGS= -lutils -ltrajopt -lopenrave0.9 -lopenrave0.9-core -losgviewer
+LDFLAGS= -lutils -ltrajopt -lopenrave0.9 -lopenrave0.9-core -losgviewer -lsco
 BOOSTFLAGS= -lboost_system -lboost_program_options
 
 all: traj clean
