@@ -5,7 +5,10 @@ CC=g++
 # options I'll pass to the compiler.
 CFLAGS=-g -c -std=c++0x
 
-INCLUDEFLAGS=-I/home/hoe01h/Downloads/trajopt/src -I/usr/include/eigen3 -I/usr/local/include/openrave-0.9 -I/usr/include/boost -L/usr/lib/ -L/usr/local/lib/
+INCLUDEFLAGS=-I/usr/local/include/trajopt/
+
+override INCLUDEFLAGS += -I/usr/include/eigen3 -I/usr/local/include/openrave-0.9 -I/usr/include/boost -I/usr/include/jsoncpp/
+override INCLUDEFLAGS += -L/usr/lib/ -L/usr/local/lib/
 
 LDFLAGS= -lutils -ltrajopt -lopenrave0.9 -lopenrave0.9-core -losgviewer -lsco
 BOOSTFLAGS= -lboost_system -lboost_program_options
