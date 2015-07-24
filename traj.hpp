@@ -46,14 +46,14 @@ class TrajTest {
                  bool verbose, 
                  int n_dof,
                  int num_step_,
-                 double control_rate,
-                 double delta_t,
+                 double control_rate,                 
                  double max_joint_velocity,
                  string env_path,
                  string robot_path);
 
         void setup(std::vector<double> &start_state,
-                   std::vector<double> &goal_state);
+                   std::vector<double> &goal_state,
+                   int num_steps=50);
 
         double getPathLength(DblVec &trajVec);
    
@@ -63,6 +63,8 @@ class TrajTest {
 
         void loadObstaclesXML(std::vector<shared_ptr<Obstacle> > *obst, 
                               std::string &obstacles_path);
+                              
+        std::vector<std::vector<double> > simplifyPath(std::vector<std::vector<double> > &path);
   
         DblVec planPath();
         ~TrajTest() = default;
@@ -76,9 +78,7 @@ class TrajTest {
 
         int num_steps_; 
 
-        double control_rate_;
-
-        double delta_t_;
+        double control_rate_;        
 
         double max_joint_velocity_; 
 
@@ -100,7 +100,11 @@ class TrajTest {
  
         Vector3d goal_; 
 
-        VarArray trajvars_;        
+        VarArray trajvars_;
+        
+        double vectorDistance(std::vector<double> vec1, std::vector<double> vec2);
+        
+               
     
 };
 
