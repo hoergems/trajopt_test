@@ -168,14 +168,11 @@ DblVec TrajTest::planPath() {
 }
 
 void TrajTest::loadObstaclesXML(std::vector<std::shared_ptr<Obstacle> > *obst, 
-                                std::string &obstacles_path) {    
-    //read_xml(is, pt);
-
+                                std::string &obstacles_path) {
     DIR *dp;
     struct dirent *dirp;
     if((dp  = opendir(obstacles_path.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << obstacles_path << endl;
-        //return errno;
     }
 
     while ((dirp = readdir(dp)) != NULL) {
@@ -188,8 +185,7 @@ void TrajTest::loadObstaclesXML(std::vector<std::shared_ptr<Obstacle> > *obst,
                 fin.open(obstacles_path + "/" + filename);
                 read_xml(fin, pt);
                 BOOST_FOREACH( ptree::value_type &v, pt.get_child("Environment") ) {
-                    if(v.first == "KinBody") { 
-                        //get_child("<xmlattr>.type").data();
+                    if(v.first == "KinBody") {
                         cout << v.second.get_child("<xmlattr>.name").data() << endl;                        
                         boost::property_tree::ptree subtree = (boost::property_tree::ptree)v.second;
                         BOOST_FOREACH(boost::property_tree::ptree::value_type &vs, subtree) {
@@ -222,14 +218,15 @@ std::vector<std::vector<double> > TrajTest::simplifyPath(std::vector<std::vector
         std::vector<double> curr_end_elem = path[curr_end_index];
         exceeds_max_distance = false;
         for (size_t i = 0; i < curr_start_elem.size(); i++) {
-            if (fabs(curr_end_elem[i] - curr_start_elem[i]) < max_dist_) {
+            if (fabs(curr_end_elem[i] - curr_start_elem[i]) > max_dist_) {
                 exceeds_max_distance = true;
             }
         }
-        if (exceeds_max_distance) {            
-            curr_end_index += 1;
+        if (!exceeds_max_distance) {                        
+            curr_end_index += 1;            
         } 
         else {            
+            
             new_path.push_back(curr_end_elem);
             curr_index = curr_end_index;
             curr_end_index += 1;
@@ -259,86 +256,15 @@ int main(int argc, char** argv) {
                            30.0,                    
                            2.0,
                            "environment/env.xml",
-                           "model/model_test.xml");
-    cout << "Called" << endl;
-    //std::vector<std::shared_ptr<traj_test::Obstacle> > *obst;
-    //std::string obstaclesPath("/home/marcus/trajopt_test/environment");
-
-    //tt.loadObstaclesXML(obst, obstaclesPath);
+                           "model/model.xml");    
 
     std::vector<double> start_state({0.0, 0.0, 0.0});
     std::vector<double> goal_state({-M_PI / 2.0, 0.0, 0.0});
 
-    boost::timer timer;
-    /**int num_steps = 0;
-    while (path.size() == 0) {
-        num_steps++;
-		tt.setup(start_state, goal_state, num_steps);    
-		path = tt.planPath();
-    }*/
-    tt.setup(start_state, goal_state, 45);
-    DblVec path = tt.planPath();
-    LOG_FATAL("elapsed: %s", CSTR(timer.elapsed()));
-    boost::timer timer2;    
-    std::vector<std::vector<double> > path_vec = tt.toVector(path);    
-    std::vector<std::vector<double> > simplified_path = tt.simplifyPath(path_vec); 
-    for (size_t i = 0; i < path_vec.size(); i++) {
-        cout << path_vec[i][0] << ", " << path_vec[i][1] << ", " << path_vec[i][2] << endl;
-    }
-    cout << "===============================" << endl;
-    for (size_t i = 0; i < simplified_path.size(); i++) {
-        cout << simplified_path[i][0] << ", " << simplified_path[i][1] << ", " << simplified_path[i][2] << endl;
-    }
-    LOG_FATAL("elapsed simplified: %s", CSTR(timer2.elapsed()));
-    LOG_FATAL("path_vec size: %s", CSTR(path_vec.size()));
-    LOG_FATAL("simple_path_vec size: %s", CSTR(simplified_path.size()));
-    
-    start_state[0] = -0.066;
-    start_state[1] = 0.03;
-    start_state[2] = 0.02;    
-    /**num_steps = 0;
-    while (path2.size() == 0) {
-        num_steps++;
-		tt.setup(start_state, goal_state, num_steps);    
-		path2 = tt.planPath();
-    } **/
+    boost::timer timer;    
     tt.setup(start_state, goal_state, 45);    
-    DblVec path2 = tt.planPath(); 
-     
-    boost::timer timer3; 
-    std::vector<std::vector<double> > path_vec2 = tt.toVector(path2);
-    std::vector<std::vector<double> > simplified_path2 = tt.simplifyPath(path_vec2);
-    for (size_t i = 0; i < path_vec2.size(); i++) {
-        cout << path_vec2[i][0] << ", " << path_vec2[i][1] << ", " << path_vec2[i][2] << endl;
-    }
-    cout << "===============================" << endl;
-    for (size_t i = 0; i < simplified_path2.size(); i++) {
-        cout << simplified_path2[i][0] << ", " << simplified_path2[i][1] << ", " << simplified_path2[i][2] << endl;
-    }
-    
-    LOG_FATAL("elapsed simplified: %s", CSTR(timer3.elapsed()));
-    LOG_FATAL("path_vec size: %s", CSTR(path_vec2.size()));
-    LOG_FATAL("simple_path_vec size: %s", CSTR(simplified_path2.size()));
-    
-    
-    /**boost::timer timer2;
-    tt.setup(start_state, goal_state);
-    DblVec trajectory1 = tt.planPath();
-    LOG_FATAL("elapsed: %s", CSTR(timer2.elapsed())); 
-
-    start_state[0] = 0.01;
-    boost::timer timer3;
-    tt.setup(start_state, goal_state);
-    DblVec trajectory2 = tt.planPath();
-    LOG_FATAL("elapsed: %s", CSTR(timer3.elapsed()));
-
-    boost::timer timer4;
-    tt.setup(start_state, goal_state);
-    tt.planPath();
-    LOG_FATAL("elapsed: %s", CSTR(timer4.elapsed()));    
-    LOG_INFO("length1: %s", CSTR(10000.0 / tt.getPathLength(trajectory1)));
-    LOG_INFO("length2: %s", CSTR(10000.0 / tt.getPathLength(trajectory2)));*/
-    
+    DblVec path = tt.planPath();
+    LOG_INFO("elapsed: %s", CSTR(timer.elapsed()));
     
     RaveDestroy();
     return 0;
