@@ -4,7 +4,7 @@
      ignored when opening with KinBody::Init because it is an 'instance' variable
 -->
 <Robot name="3DOFRobot">
-<KinBody>
+<KinBody name="KinBody">
    <Body name="Base" type="static">
      <Translation>0.0  0.0  0.0</Translation>
      <Geom type="cylinder">
@@ -36,7 +36,7 @@
    
    <Body name="Arm1" type="dynamic">
      <offsetfrom>Arm0</offsetfrom>
-     <Translation>1.0 0 0.01</Translation>
+     <Translation>1.0 0 0.0</Translation>
      <Geom type="box">
        <Translation>0.5 0.0 0</Translation>
        <Extents>0.5 0.0075 0.005</Extents>
@@ -55,7 +55,7 @@
 
    <Body name="Arm2" type="dynamic">
      <offsetfrom>Arm1</offsetfrom>
-     <Translation>1.0 0 0.01</Translation>
+     <Translation>1.0 0.0 0.0</Translation>
      <Geom type="box">
        <Translation>0.5 0.0 0</Translation>
        <Extents>0.5 0.0075 0.005</Extents>
@@ -72,26 +72,6 @@
      <resolution>0.0</resolution>
    </Joint>
    
-   <!--<Body name="Arm2" type="dynamic">
-     <offsetfrom>Arm1</offsetfrom>
-     <Translation>0.14 0 0.01</Translation>
-     <Geom type="box">
-       <Translation>0.5 0 0</Translation>
-       <Extents>0.5 0.005 0.005</Extents>
-     </Geom>
-   </Body>
-   <Joint circular="true" name="Arm2" type="hinge">
-     <Body>Arm1</Body>
-     <Body>Arm2</Body>
-     <offsetfrom>Arm2</offsetfrom>
-     <weight>3</weight>
-     <limitsdeg>-180 180</limitsdeg>
-     <axis>0 0 1</axis>
-     <maxvel>2</maxvel>
-     <resolution>2</resolution>
-   </Joint>-->
-   
-   
  </KinBody>
  
  <Manipulator name="arm">
@@ -100,7 +80,7 @@
    <joints>j1 j2 j3</joints>      
    <closingdirection>1 1</closingdirection>
    <direction>1 0 0</direction>
-   <Translation>0.125 0 0</Translation>
+   <Translation>1.0 0 0</Translation>
  </Manipulator>
 
 </Robot>

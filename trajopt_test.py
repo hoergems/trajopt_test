@@ -1,4 +1,6 @@
 import openravepy
+from openravepy import *
+from openravepy.misc import InitOpenRAVELogging 
 import trajoptpy
 import json
 import time
@@ -7,6 +9,7 @@ from trajoptpy.check_traj import traj_is_safe
 
 class TrajoptTest:
     def __init__(self, interactive):
+        InitOpenRAVELogging() 
         env = openravepy.Environment()
         env.StopSimulation()
         print "Loading robot model"
@@ -18,20 +21,36 @@ class TrajoptTest:
         
         trajoptpy.SetInteractive(True) # pause every iteration, until you press 'p'. Press escape to disable further plotting
         robot = env.GetRobots()[0]
+        robot.SetActiveManipulator("arm")
         print robot.GetManipulator("arm")
         print robot.GetManipulator('arm').GetArmIndices()
         
+        ikmodel = openravepy.databases.inversekinematics.InverseKinematicsModel(robot,
+                                                                                iktype=IkParameterizationType.TranslationXY2D)        
+        
+        
+        if not ikmodel.load():
+            ikmodel.autogenerate()
+            
         joint_start = [0.0, 0.0, 0.0]
         
         robot.SetDOFValues(joint_start, robot.GetManipulator('arm').GetArmIndices())
+        target=ikmodel.manip.GetTransform()[0:2,3]
+        target[0] = -2.7       
         
-        joint_target = [-np.pi / 2.0, 0.0, 0.0]
+        solutions = ikmodel.manip.FindIKSolutions(IkParameterization(target,IkParameterization.Type.TranslationXY2D), False)
+        
+        if not len(solutions) == 0:        
+            joint_target = [solutions[0][0], solutions[0][1], solutions[0][1]]
+        else:
+            print "No IK solutions found for cartesian coordinates " + str(target)
+            return
         
         control_rate = 30.0
         delta_t = 1.0 / control_rate
         max_joint_velocity = 2.0
         
-        n_steps = 50
+        n_steps = 300
         
         request = {
           "basic_info" : {
